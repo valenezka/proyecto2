@@ -1,0 +1,21 @@
+from PIL import Image
+
+def extraer_fotogramas(gif_path):
+    gif = Image.open(gif_path)
+    fotogramas = []
+    try:
+        while True:
+            gif.seek(len(fotogramas)) # Va al siguiente fotograma
+            fotograma = gif.copy()
+            if not fotograma.getpalette(): # Si no hay paleta, añade una por defecto
+                fotograma.putpalette(gif.getpalette())
+            fotogramas.append(fotograma)
+    except EOFError:
+        pass
+    return fotogramas
+
+gif_path = "Cars3-choque.gif"
+fotogramas = extraer_fotogramas(gif_path)
+
+for i, fotograma in enumerate(fotogramas):
+    fotograma.save(f"extraccion{i}.png", "PNG")
